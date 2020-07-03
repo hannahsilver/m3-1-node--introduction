@@ -16,22 +16,12 @@ express()
 
   // Nothing to modify above this line
   // ---------------------------------
-  .get("/monkey-message", (req, res) => {
-    const messages = [
-      "Don’t monkey around with me.",
-      "If you pay peanuts, you get monkeys.",
-      "I fling 💩 at you!",
-      "🙊",
-      "🙈",
-      "🙉",
-    ];
-    const randomMessage = Math.floor(Math.random() * messages.length);
+  .get("/parrot-message", (req, res) => {
+    console.log(req.query);
     const message = {
-      author: "monkey",
-      text: messages[randomMessage],
+      author: "parrot",
+      text: req.query.text,
     };
-    console.log(message);
-
     const randomTime = Math.floor(Math.random() * 3000);
     setTimeout(() => {
       res.status(200).json({ status: 200, message });
