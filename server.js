@@ -16,12 +16,57 @@ express()
 
   // Nothing to modify above this line
   // ---------------------------------
-  .get("/parrot-message", (req, res) => {
-    console.log(req.query);
-    const message = {
-      author: "parrot",
-      text: req.query.text,
+  .get("/bot-message", (req, res) => {
+    const getBotMessage = (text) => {
+      let botMsg = text;
+      let userText = text.toLowerCase();
+      let hearJoke = false;
+
+      const commonGreetings = ["hi", "hello", "howdy"];
+      commonGreetings.forEach((greeting) => {
+        if (userText.includes(greeting)) {
+          botMsg = "Hello!";
+        }
+      });
+      const commonGoodbyes = ["goodbye", "bye", "ciao"];
+      commonGoodbyes.forEach((goodbye) => {
+        if (userText.includes(goodbye)) {
+          botMsg = "see ya!";
+        }
+      });
+      const somethingFunny = ["something funny"];
+      const jokes = [
+        "What's brown and sticky? A stick.",
+        "Why can't you hear a psychiatrist using the bathroom? Because the 'P' is silent.",
+        "What did the fisherman say to the magician? Pick a cod, any cod.",
+      ];
+
+      if (hearJoke === true) {
+        if (userText.includes("yes")) {
+          botMsg = jokes[Math.floor(Math.random() * 2)];
+          hearJoke = false;
+        } else if (userText.includes("no")) {
+          botMsg = "Goodbye...";
+          hearJoke = false;
+        }
+      }
+      // couldn't figure out how to use the hearJoke function properly. Everything works except for the joke output.
+
+      somethingFunny.forEach((funny) => {
+        if (userText.includes(funny)) {
+          botMsg = "do you want to hear a joke?";
+          hearJoke = true;
+        }
+      });
+
+      return botMsg;
     };
+
+    const message = {
+      author: "bot",
+      text: "bzzt " + getBotMessage(req.query.text),
+    };
+
     const randomTime = Math.floor(Math.random() * 3000);
     setTimeout(() => {
       res.status(200).json({ status: 200, message });
